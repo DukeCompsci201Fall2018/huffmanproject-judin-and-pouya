@@ -78,8 +78,8 @@ public class HuffProcessor {
 	}
 	
 	public HuffNode readTreeHeader(BitInputStream in) {
-		
-		
-		
+		int bit = in.read();
+		if (bit == -1) throw new HuffException("-1 found in header");
+		return new HuffNode(0, 0, null, null);
 	}
 }
