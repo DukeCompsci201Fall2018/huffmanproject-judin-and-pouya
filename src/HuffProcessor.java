@@ -59,7 +59,12 @@ public class HuffProcessor {
 	 *            Buffered bit stream writing to the output file.
 	 */
 	public void decompress(BitInputStream in, BitOutputStream out){
-
+		
+		int bits = in.readBits(BITS_PER_INT);
+		if (bits != HUFF_TREE) {
+			throw new HuffException("illegal header starts with " + bits);
+		}
+		
 		while (true){
 			int val = in.readBits(BITS_PER_WORD);
 			if (val == -1) break;
