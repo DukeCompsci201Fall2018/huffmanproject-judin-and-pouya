@@ -65,7 +65,7 @@ public class HuffProcessor {
 			throw new HuffException("illegal header starts with " + bits);
 		}
 		
-//		HuffNode root = readTreeHeader(in);
+		HuffNode root = readTreeHeader(in);
 //		readCompressedBits(root, in, out);
 		out.close();
 		
@@ -78,8 +78,24 @@ public class HuffProcessor {
 	}
 	
 	public HuffNode readTreeHeader(BitInputStream in) {
+		//TODO: Figure out what this is supposed to do!!
 		int bit = in.read();
 		if (bit == -1) throw new HuffException("-1 found in header");
 		return new HuffNode(0, 0, null, null);
+	}
+
+	public void readCompressedBits(HuffNode root, BitInputStream in, BitInputStream out) {
+		int bit = in.read();
+		if (bit == -1) throw new HuffException("-1 found in header");
+		if (bit == 0) {
+			//TODO: Figure out what to put here!
+		}
+		else {
+			String value = "";
+			for (int i = 0; i < BITS_PER_WORD+1; i++) {
+				value = value + in.read();
+			}
+			return new HuffNode(value, 0, null, null);
+		}
 	}
 }
