@@ -66,36 +66,49 @@ public class HuffProcessor {
 		}
 		
 		HuffNode root = readTreeHeader(in);
-//		readCompressedBits(root, in, out);
+		readCompressedBits(root, in, out);
 		out.close();
 		
-		while (true){
-			int val = in.readBits(BITS_PER_WORD);
-			if (val == -1) break;
-			out.writeBits(BITS_PER_WORD, val);
-		}
-		out.close();
 	}
 	
 	public HuffNode readTreeHeader(BitInputStream in) {
-		//TODO: Figure out what this is supposed to do!!
-		int bit = in.read();
-		if (bit == -1) throw new HuffException("-1 found in header");
-		return new HuffNode(0, 0, null, null);
-	}
-
-	public void readCompressedBits(HuffNode root, BitInputStream in, BitInputStream out) {
 		int bit = in.read();
 		if (bit == -1) throw new HuffException("-1 found in header");
 		if (bit == 0) {
-			//TODO: Figure out what to put here!
+			return new HuffNode(0, 0, readTreeHeader(in), readTreeHeader(in));
 		}
 		else {
-			String value = "";
-			for (int i = 0; i < BITS_PER_WORD+1; i++) {
-				value = value + in.read();
-			}
-			return new HuffNode(value, 0, null, null);
+			return new HuffNode(in.readBits(BITS_PER_WORD + 1), 0, null, null);
 		}
 	}
+
+	public void readCompressedBits(HuffNode root, BitInputStream in, BitOutputStream out) {
+		
+		HuffNode temp = root;
+		
+		while(true) {
+			int bit = in.read();
+			if (bit == -1) throw new HuffException("-1 found in header");
+			if (bit == 0) {
+				temp = temp.myRight;
+				//TODO: Figure out what to put here!
+			}
+			else {
+				temp = temp.myLeft;
+			}
+			
+			if (temp.myLeft == null && temp.myRight == null) {
+				if (temp.myValue == PSEUDO_EOF) break;
+				else {
+					for (int i = 0; i < BITS_PER_WORD; i++) {
+						out.write(temp.myValue);
+						temp = root;
+					}
+				}
+			}
+
+		}
+	}
+	
+	
 }
