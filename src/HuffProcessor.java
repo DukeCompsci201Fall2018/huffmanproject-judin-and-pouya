@@ -82,9 +82,7 @@ public class HuffProcessor {
 	private void writeHeader(HuffNode root, BitOutputStream out) {
 		if (root.myLeft == null && root.myRight == null) {
 			out.write(1);
-			for (int i = 0; i < BITS_PER_WORD; i++) {
-				out.write(root.myValue);
-			}
+			out.writeBits(BITS_PER_WORD, root.myValue);
 		}
 		
 		else {
@@ -198,10 +196,8 @@ public class HuffProcessor {
 			if (temp.myLeft == null && temp.myRight == null) {
 				if (temp.myValue == PSEUDO_EOF) break;
 				else {
-					for (int i = 0; i < BITS_PER_WORD; i++) {
-						out.write(temp.myValue);
-						temp = root;
-					}
+					out.writeBits(BITS_PER_WORD, temp.myValue);
+					temp = root;
 				}
 			}
 
