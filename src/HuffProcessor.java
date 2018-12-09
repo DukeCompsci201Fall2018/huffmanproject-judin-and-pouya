@@ -86,7 +86,7 @@ public class HuffProcessor {
 		}
 		
 		else {
-			out.write(root.myValue);
+			out.writeBits(1, root.myValue);
 			writeHeader(root.myLeft, out);
 			writeHeader(root.myRight, out);
 		}
