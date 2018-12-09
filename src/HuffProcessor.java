@@ -185,7 +185,7 @@ public class HuffProcessor {
 		HuffNode temp = root;
 		
 		while(true) {
-			int bit = in.read();
+			int bit = in.readBits(1);
 			if (bit == -1) throw new HuffException("-1 found in header");
 			if (bit == 0) {
 				temp = temp.myRight;
