@@ -189,7 +189,7 @@ public class HuffProcessor {
 			if (temp.myLeft == null && temp.myRight == null) {
 				if (temp.myValue == PSEUDO_EOF) break;
 				else {
-					out.writeBits(BITS_PER_WORD, temp.myValue);
+					out.writeBits(BITS_PER_WORD+1, temp.myValue);
 					temp = root;
 				}
 			}
